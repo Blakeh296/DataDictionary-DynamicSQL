@@ -35,7 +35,8 @@ namespace DataDictonary_DynamicSQL
                 {
                     dbID = int.Parse(drDbName.ItemArray[1].ToString());
                     DatabaseName = drDbName.ItemArray[0].ToString();
-                    cbDataBaseNames.Items.Add(new ComboObject(dbID, DatabaseName));
+                    ComboObject comboObject = new ComboObject(dbID, DatabaseName);
+                    cbDataBaseNames.Items.Add(comboObject.DatabaseName);
                 }
             }
             catch (Exception ex)

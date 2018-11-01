@@ -23,7 +23,7 @@ namespace DataDictonary_DynamicSQL
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            SqlDataAdapter sqlDa = new SqlDataAdapter("SelectAllDatabases", sqlConn);
+            SqlDataAdapter sqlDa = new SqlDataAdapter("sp_SelectAllDatabases", sqlConn);
             DataTable dtDatabases = new DataTable();
             int dbID;
             string DatabaseName;
@@ -38,6 +38,36 @@ namespace DataDictonary_DynamicSQL
                     ComboObject comboObject = new ComboObject(dbID, DatabaseName);
                     cbDataBaseNames.Items.Add(comboObject.DatabaseName);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void cbDataBaseNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Create a ComboObject and set it to the current dropdown box value
+            ComboObject currentObject = (ComboObject)cbDataBaseNames.SelectedItem;
+            int DatabaseID = currentObject.DatabaseID;
+            string xtype = @"'U','ID','V','P'";
+            DataTable dtTables = new DataTable();
+
+            try
+            {
+                //Declare a SQL Command, give it the stored procedure and SQL Connection
+                SqlCommand sqlCommand = new SqlCommand("sp_SelectAllTablesFromDatabase", sqlConn);
+                /*Set the Command type to Stored Procedure*/
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.AddWithValue(@"databaseID", DatabaseID);
+                sqlCommand.Parameters.AddWithValue(@"xtype", xtype);
+
+                SqlDataAdapter sqlDA = new SqlDataAdapter(sqlCommand);
+                sqlDA.Fill(dtTables);
+
+                dgvTablesView.DataSource = dtTables;
+                
             }
             catch (Exception ex)
             {
@@ -69,9 +99,6 @@ namespace DataDictonary_DynamicSQL
             }
         }
 
-        private void cbDataBaseNames_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }

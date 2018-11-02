@@ -16,7 +16,7 @@ namespace DataDictonary_DynamicSQL
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new DataDictionaryDynamicSQL());
         }
     }
 }
